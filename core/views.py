@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
-from .models import Publication
+from .models import Publication, Lesson
 
 class LandingView(TemplateView):
     """
@@ -19,3 +19,12 @@ class PublicationListView(ListView):
 
     def get_queryset(self):
         return Publication.objects.all().order_by('-created_at')
+
+
+# class ScheduleView(ListView):
+
+class ContactPageView(TemplateView):
+    """
+    Страница контактов.
+    """
+    template_name = 'contact.html'

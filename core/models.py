@@ -17,3 +17,19 @@ class Publication(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class Lesson(models.Model):
+    """
+    Модель урока.
+    """
+    students_name = models.CharField(max_length=100, verbose_name='Имя ученика')
+    lesson_date = models.DateField(verbose_name='Дата занятия')
+    lesson_time = models.TimeField(verbose_name='Время занятия')
+    students_phone = models.CharField(max_length=15, verbose_name='Телефон ученика')
+    lesson_duration = models.PositiveIntegerField(verbose_name='Продолжительность занятия (минуты)', default=60)
+
+    class Meta:
+        verbose_name = 'Занятие'
+        verbose_name_plural = 'Занятия'
+        ordering = ['lesson_date', 'lesson_time']
