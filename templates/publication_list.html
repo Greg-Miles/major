@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Список публикаций
+{% endblock title %}
+
+{% block content %}
+    {% for publication in publications %}
+        <div class="container mt-5">
+            <h2>{{ publication.title }}</h2>
+            <p>{{ publication.content|truncatewords:50 }}</p>
+            <p class="text-muted"> Дата: {{ publication.created_at|date:"d M Y" }}</p>
+            {% comment %} Добавить ссылку на файл? {% endcomment %}
+        </div>
+    {% empty %}
+        <div class="container mt-5">
+            <h2>Нет публикаций</h2>
+            <p>Пока что нет публикаций в блоге.</p>
+        </div>
+    {% endfor %}
+{% endblock content %}
