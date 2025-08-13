@@ -7,7 +7,7 @@ class Publication(models.Model):
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     content = models.TextField(verbose_name='Содержание')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    file = models.FileField(upload_to='media/publications/', blank=True, null=True, verbose_name='Файл')
+    file = models.FileField(upload_to='publications/', blank=True, null=True, verbose_name='Файл')
     is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
 
     class Meta:

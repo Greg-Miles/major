@@ -27,4 +27,4 @@ class ContactPageView(TemplateView):
     """
     Страница контактов.
     """
-    template_name = 'contact.html'
+    template_name = 'contacts.html'

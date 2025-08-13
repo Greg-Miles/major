@@ -9,6 +9,14 @@
             <li class="breadcrumb-item" aria-current="page">
                 <a href="{% url 'publication_list' %}">Блог</a>
             </li>
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="{% url 'contacts' %}">Контакты</a>
+            </li>
+            {% if user.is_superuser %}
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="{% url 'admin:index' %}">Управление</a>
+            </li>
+            {% endif %}
         </ol>
 
 
