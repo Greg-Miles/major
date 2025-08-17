@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import LandingView, PublicationListView, ContactPageView
+from core.views import (
+    LandingView,
+    PublicationListView,
+    ContactPageView,
+    LessonScheduleView,
+    )
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,4 +30,5 @@ urlpatterns = [
     path('', LandingView.as_view(), name='landing'),
     path('blog/', PublicationListView.as_view(), name='publication_list'),
     path('contacts/', ContactPageView.as_view(), name='contacts'),
+    path('schedule/', LessonScheduleView.as_view(), name='lessons_schedule'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <div class="container">
+        <h2>Расписание занятий</h2>
+    </div>
+    <div class="container mt-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    {% for weekday_num, weekday_name, lessons in schedule %}
+                        <th>{{ weekday_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for weekday_num, weekday_name, lessons in schedule %}
+                    <td>
+                        {% for lesson in lessons %}
+
+                            <strong>{{ lesson.students_name }}</strong><br>
+                            Время: {{ lesson.lesson_time }}<br>
+                            Продолжительность: {{ lesson.lesson_duration }} мин <br>
+                        {% empty %}
+                            <span class="text-muted">Нет занятий</span>
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

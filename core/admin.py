@@ -16,10 +16,10 @@ class LessonAdmin(admin.ModelAdmin):
     """
     Админка для модели урока.
     """
-    list_display = ('students_name', 'lesson_date', 'lesson_time', 'students_phone', 'lesson_duration')
+    list_display = ('students_name', 'weekday', 'lesson_time', 'students_phone', 'lesson_duration')
     search_fields = ('students_name', 'students_phone')
-    list_filter = ('lesson_date',)
-    ordering = ('lesson_date', 'lesson_time')
+    list_filter = ('weekday',)
+    ordering = ('weekday', 'lesson_time')
 
 admin.site.register(Publication, PublicationAdmin)
 admin.site.register(Lesson, LessonAdmin)

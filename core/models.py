@@ -24,7 +24,15 @@ class Lesson(models.Model):
     Модель урока.
     """
     students_name = models.CharField(max_length=100, verbose_name='Имя ученика')
-    lesson_date = models.DateField(verbose_name='Дата занятия')
+    weekday = models.IntegerField(max_length=10, choices=[
+        (0, 'Понедельник'),
+        (1, 'Вторник'),
+        (2, 'Среда'),
+        (3, 'Четверг'),
+        (4, 'Пятница'),
+        (5, 'Суббота'),
+        (6, 'Воскресенье')
+    ], verbose_name='День недели')
     lesson_time = models.TimeField(verbose_name='Время занятия')
     students_phone = models.CharField(max_length=15, verbose_name='Телефон ученика')
     lesson_duration = models.PositiveIntegerField(verbose_name='Продолжительность занятия (минуты)', default=60)
@@ -32,4 +40,4 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = 'Занятие'
         verbose_name_plural = 'Занятия'
-        ordering = ['lesson_date', 'lesson_time']
+        ordering = ['weekday', 'lesson_time']
