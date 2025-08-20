@@ -4,9 +4,29 @@
 {% block title %}
     Главная страница
 {% endblock title %}
+{% block extra_styles %}
+    {{ form.media }}
+{% endblock extra_styles %}
 
 {% block content %}
 <div class="container mt-5">
     <h1 class="text-center">Добро пожаловать на главную страницу!</h1>
-    <p class="text-center">Это пример контента для главной страницы вашего сайта.</p>
+    {{page_content.content|safe}}
+        {% if user.is_superuser %}
+        <div class="container">
+
+            <button id="edit-btn" class="btn btn-primary"><i class="bi bi-pencil-square"></i>Редактировать</button>
+
+
+            <form id="edit-form" method="post" style="display:none;">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Сохранить</button>
+                <button type="button" id="cancel-btn" class="btn btn-secondary">Отмена</button>
+            </form>
+        </div>
+    {% endif %}
 {% endblock content %}
+{% block extra_scripts %}
+    <script src="{% static 'js/scripts.js' %}"></script>
+{% endblock extra_scripts %}
