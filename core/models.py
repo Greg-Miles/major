@@ -1,4 +1,5 @@
 from django.db import models
+from django_ckeditor_5.fields import CKEditor5Field
 
 class Publication(models.Model):
     """
@@ -47,7 +48,7 @@ class PageContent(models.Model):
     Модель для хранения контента страниц.
     """
     page_name = models.CharField(max_length=100, unique=True, verbose_name='Имя страницы')
-    content = models.TextField(verbose_name='Содержимое страницы')
+    content = CKEditor5Field(verbose_name='Содержимое страницы')
     page_for = models.CharField(max_length=50, verbose_name='Для станицы')
 
     class Meta:

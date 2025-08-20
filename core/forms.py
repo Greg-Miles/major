@@ -1,4 +1,5 @@
 from django import forms
+from django_ckeditor_5.widgets import CKEditor5Widget
 from .models import PageContent
 
 class PageContentForm(forms.ModelForm):
@@ -9,7 +10,7 @@ class PageContentForm(forms.ModelForm):
         model = PageContent
         fields = ['content', ]
         widgets = {
-            'content': forms.Textarea(attrs={'rows': 10, 'cols': 80, 'class':'form-control'}),
+            'content': CKEditor5Widget(attrs={'rows': 10, 'cols': 80, }),
         }
         labels = {
             'page_name': 'Имя страницы',

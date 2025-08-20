@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% block extra_styles %}
+    {{ form.media }}
+{% endblock extra_styles %}
 {% block content %}
 <div class="container">
     <div class="card">
@@ -12,7 +15,10 @@
     </div>
     {% if user.is_superuser %}
         <div class="container">
+
             <button id="edit-btn" class="btn btn-primary"><i class="bi bi-pencil-square"></i>Редактировать</button>
+
+
             <form id="edit-form" method="post" style="display:none;">
                 {% csrf_token %}
                 {{ form.as_p }}
