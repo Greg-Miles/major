@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from core.views import (
     LandingView,
     PublicationListView,
@@ -31,4 +31,5 @@ urlpatterns = [
     path('blog/', PublicationListView.as_view(), name='publication_list'),
     path('contacts/', ContactPageView.as_view(), name='contacts'),
     path('schedule/', LessonScheduleView.as_view(), name='lessons_schedule'),
+    path("ckeditor5/", include('django_ckeditor_5.urls'), name="ck_editor_5_upload_file"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

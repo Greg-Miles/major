@@ -24,7 +24,7 @@ class Lesson(models.Model):
     Модель урока.
     """
     students_name = models.CharField(max_length=100, verbose_name='Имя ученика')
-    weekday = models.IntegerField(max_length=10, choices=[
+    weekday = models.IntegerField(choices=[
         (0, 'Понедельник'),
         (1, 'Вторник'),
         (2, 'Среда'),
@@ -41,3 +41,18 @@ class Lesson(models.Model):
         verbose_name = 'Занятие'
         verbose_name_plural = 'Занятия'
         ordering = ['weekday', 'lesson_time']
+
+class PageContent(models.Model):
+    """
+    Модель для хранения контента страниц.
+    """
+    page_name = models.CharField(max_length=100, unique=True, verbose_name='Имя страницы')
+    content = models.TextField(verbose_name='Содержимое страницы')
+    page_for = models.CharField(max_length=50, verbose_name='Для станицы')
+
+    class Meta:
+        verbose_name = 'Контент страницы'
+        verbose_name_plural = 'Контент страниц'
+
+    def __str__(self):
+        return self.page_name

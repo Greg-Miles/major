@@ -7,12 +7,23 @@
             <h2>Контакты</h2>
         </div>
         <div class="card-body">
-            <p>Если у вас есть вопросы, или вы хотите связаться со мной, пожалуйста, используйте следующие контактные данные:</p>
-            <ul>
-                <li>Email: </li>
-                <li>Телефон: </li>
-            </ul>
+            <p>{{ page_content.content | safe }}</p>
+        </div>
     </div>
+    {% if user.is_superuser %}
+        <div class="container">
+            <button id="edit-btn" class="btn btn-primary"><i class="bi bi-pencil-square"></i>Редактировать</button>
+            <form id="edit-form" method="post" style="display:none;">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Сохранить</button>
+                <button type="button" id="cancel-btn" class="btn btn-secondary">Отмена</button>
+            </form>
+        </div>
+    {% endif %}
 </div>
 
 {% endblock content %}
+{% block extra_scripts %}
+    <script src="{% static 'js/scripts.js' %}"></script>
+{% endblock extra_scripts %}
