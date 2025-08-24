@@ -7,9 +7,24 @@ class Publication(models.Model):
     """
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     content = CKEditor5Field(verbose_name='Содержание')
+    category = models.IntegerField(
+        choices=[
+        (0, "7 класс"),
+        (1, "8 класс"),
+        (2, "9 класс"),
+        (3, "10 класс"),
+        (4, "11 класс"),
+        (5, "Внеурочная деятельность"),
+        (6, "Разное")],
+        default=(6, "Разное"),
+        verbose_name='Категория'
+        )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    file = models.FileField(upload_to='publications/', blank=True, null=True, verbose_name='Файл')
+    presentation_file = models.FileField(upload_to='publications/presentations/', blank=True, null=True, verbose_name='Файл')
+    preview_file = models.FileField(upload_to='publications/previews/', blank=True, null=True, verbose_name='Превью файл')
     is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
+    downloads_count = models.PositiveIntegerField(default=0,
+        verbose_name='Количество скачиваний')
 
     class Meta:
         verbose_name = 'Публикация'

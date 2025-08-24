@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseForbidden, FileResponse
 from django.conf import settings
 from django.views.generic import TemplateView, ListView
+from django.db.models import F
 import bleach
 from .models import Publication, Lesson, PageContent
 from .forms import PageContentForm
@@ -16,6 +17,36 @@ def get_page_content(page_for):
 
     except PageContent.DoesNotExist:
         return None
+
+def download_file(request, pk):
+    """
+    Отдает файл для скачивания и увеличивает счетчик загрузок,
+    предотвращая повторный подсчет для одного пользователя в рамках сессии.
+    """
+    pub = get_object_or_404(Publication, pk=pk)
+
+    # Получаем список уже скачанных файлов из сессии.
+    # Если списка нет, создаем пустой.
+    downloaded_files = request.session.get('downloaded_files', [])
+
+    # Проверяем, был ли этот файл уже скачан в текущей сессии
+    if pub.pk not in downloaded_files:
+        # Используем F() для атомарного увеличения счетчика на уровне БД,
+        # чтобы избежать состояния гонки.
+        pub.downloads_count = F('downloads_count') + 1
+        pub.save(update_fields=['downloads_count'])
+        
+        # Добавляем ID файла в список скачанных в сессии
+        downloaded_files.append(pub.pk)
+        request.session['downloaded_files'] = downloaded_files
+        
+        # Явно помечаем сессию как измененную, чтобы Django ее сохранил.
+        # В некоторых случаях, когда изменяются вложенные структуры данных,
+        # это необходимо сделать вручную.
+        request.session.modified = True
+
+    # Отдаем файл пользователю
+    return FileResponse(pub.presentation_file.open(), as_attachment=True, filename=pub.presentation_file.name)
 
 class LandingView(TemplateView):
     """

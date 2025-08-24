@@ -21,6 +21,7 @@ from core.views import (
     PublicationListView,
     ContactPageView,
     LessonScheduleView,
+    download_file,
     )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,6 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls,),
     path('', LandingView.as_view(), name='landing'),
     path('blog/', PublicationListView.as_view(), name='publication_list'),
+    path('publications/<int:pk>/download/', download_file, name='download_file'),
     path('contacts/', ContactPageView.as_view(), name='contacts'),
     path('schedule/', LessonScheduleView.as_view(), name='lessons_schedule'),
     path("ckeditor5/", include('django_ckeditor_5.urls'), name="ck_editor_5_upload_file"),

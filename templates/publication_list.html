@@ -6,20 +6,40 @@
 
 {% block content %}
     {% for publication in publications %}
-        <div class="container mt-5">
-            <h2>{{ publication.title }}</h2>
-            <p>{{ publication.content|truncatewords:50 }}</p>
-            {% if publication.file %}
-                <p>
-                    <a href="{{ publication.file.url }}" class="btn btn-primary">Скачать файл</a>
-                </p>
-            {% else %}
-                <p class="text-muted">Файл не прикреплен</p>
-            {% endif %}
-            <p class="text-muted"> Дата: {{ publication.created_at|date:"d M Y" }}</p>
-            {% comment %} Добавить ссылку на файл? {% endcomment %}
-
-        </div>
+        {% if publication.is_published %}
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>{{ publication.title }}</h2>
+                    </div>
+                    <div class="container">
+                        <div class="d-flex flex-column card-body">
+                            <div class="col">
+                                <p>{{ publication.content|safe }}</p>
+                                {% if publication.presentation_file %}
+                                    <p>
+                                        <a href="{% url "download_file" publication.pk %}" class="btn btn-primary">Скачать файл</a>
+                                    </p>
+                                {% else %}
+                                    <p class="text-muted">Файл не прикреплен</p>
+                                {% endif %}
+                                {% if publication.preview_file %}
+                                    <div class="embed-responsive embed-responsive-16by9 mb-3">
+                                        <iframe src="{{ publication.preview_file.url }}" width="100%" height="500px"></iframe>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="row">
+                                <div class="d-flex justify-content-between w-100 px-3 pb-2">
+                                    <span class="text-muted">Дата: {{ publication.created_at|date:"d M Y" }}</span>
+                                    <span class="text-muted">Скачано {{ publication.downloads_count }} раз.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        {% endif %}
     {% empty %}
         <div class="container mt-5">
             <h2>Нет публикаций</h2>

@@ -7,7 +7,7 @@ class PublicationAdmin(admin.ModelAdmin):
     """
     Админка для модели публикации.
     """
-    list_display = ('title', 'created_at', 'is_published')
+    list_display = ('title', 'created_at', 'category', 'is_published', 'downloads_count')
     search_fields = ('title',)
     list_filter = ('is_published', 'created_at')
     ordering = ('-created_at',)
