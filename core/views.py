@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden, FileResponse
+from django.http import HttpResponseForbidden, FileResponse, JsonResponse
 from django.conf import settings
 from django.contrib import messages
 from django.views.generic import TemplateView, ListView
@@ -83,7 +83,12 @@ class LandingView(TemplateView):
             form.instance.page_for = self.template_name
             form.instance.page_name = 'Главная страница'
             form.save()
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'content': bleached_content})
             return redirect('landing')
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'errors': form.errors})
+        context = self.get_context_data(form=form)
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -153,7 +158,11 @@ class ContactPageView(TemplateView):
             form.instance.page_for = self.template_name
             form.instance.page_name = 'Контакты'
             form.save()
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'content': bleached_content})
             return redirect('contacts')
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'errors': form.errors})
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -207,7 +216,11 @@ class LessonScheduleView(ListView):
             form.instance.page_for = self.template_name
             form.instance.page_name = 'Расписание уроков'
             form.save()
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'content': bleached_content})
             return redirect('lessons_schedule')
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'errors': form.errors})
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
     

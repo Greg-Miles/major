@@ -151,7 +151,7 @@ customColorPalette = [
 ]
 
 CKEDITOR_5_CUSTOM_CSS = 'django_ckeditor_5/admin_dark_mode_fix.css'
-CKEDITOR_5_FILE_STORAGE = "blog.storage.CustomStorage"
+
 
 CKEDITOR_5_CONFIGS = {
     "default": {

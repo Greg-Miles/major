@@ -36,20 +36,22 @@
             </tbody>
         </table>
     </div>
-    <div class="container">
-        {{ page_content.content | safe }}
+    <div class="container editable-block">
+        <div class="page-content-block">
+            {{ page_content.content | safe }}
+        </div>
         {% if user.is_superuser %}
 
-        <div class="col">
+        <div>
 
-            <button id="edit-btn" class="edit-btn"><i class="bi bi-pencil-square"></i>Редактировать</button>
+            <button class="edit-btn"><i class="bi bi-pencil-square"></i>Редактировать</button>
 
 
             <form class="edit-form" method="post" style="display:none;">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" id="save-btn" class="save-btn">Сохранить</button>
-                <button type="button" id="cancel-btn" class="cancel-btn">Отмена</button>
+                <button type="submit" class="save-btn">Сохранить</button>
+                <button type="button" class="cancel-btn">Отмена</button>
             </form>
         </div>
     {% endif %}

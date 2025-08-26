@@ -4,26 +4,26 @@
     {{ form.media }}
 {% endblock extra_styles %}
 {% block content %}
-<div class="container">
+<div class="editable-block container">
     <div class="card my-5">
         <div class="pub-header">
             <h2>Контакты</h2>
         </div>
-        <div class="card-body">
-            <p>{{ page_content.content | safe }}</p>
+        <div class="card-body page-content-block">
+            {{ page_content.content | safe }}
         </div>
     </div>
     {% if user.is_superuser %}
-        <div class="container">
+        <div>
 
-            <button id="edit-btn" class="edit-btn"><i class="bi bi-pencil-square"></i>Редактировать</button>
+            <button class="edit-btn"><i class="bi bi-pencil-square"></i>Редактировать</button>
 
 
             <form class="edit-form" method="post" style="display:none;">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit" class="save-btn">Сохранить</button>
-                <button type="button" id="cancel-btn" class="cancel-btn">Отмена</button>
+                <button type="button" class="cancel-btn">Отмена</button>
             </form>
         </div>
     {% endif %}
