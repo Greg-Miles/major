@@ -5,11 +5,23 @@
 {% endblock title %}
 
 {% block content %}
-    {% for publication in publications %}
-        {% if publication.is_published %}
-            <div class="container mt-5">
-                <div class="card">
-                    <div class="card-header">
+<div class="container">
+    <div class="row mt-5">
+        <form method="GET" action=".">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" class="form-control-sm" id="searchForm" aria-describedby="searchForm" placeholder="Введите поисковый запрос" name="q" value="{{ request.GET.q|default:'' }}">
+                <button type="submit" class="btn btn-primary"><span><i class="bi bi-search"></i></span></button>
+            </div>
+
+        </form>
+    </div>
+    <div class="col">
+        {% for publication in publications %}
+            {% if publication.is_published %}
+
+                <div class="card mt-5">
+                    <div class="card-header pub-header">
                         <h2>{{ publication.title }}</h2>
                     </div>
                     <div class="container">
@@ -38,12 +50,14 @@
                         </div>
                     </div>    
                 </div>
+
+            {% endif %}
+        {% empty %}
+            <div class="col mt-5">
+                <h2>Нет публикаций</h2>
+                <p>Пока что нет публикаций в блоге.</p>
             </div>
-        {% endif %}
-    {% empty %}
-        <div class="container mt-5">
-            <h2>Нет публикаций</h2>
-            <p>Пока что нет публикаций в блоге.</p>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+</div>
 {% endblock content %}

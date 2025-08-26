@@ -96,6 +96,14 @@ class PublicationListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        """
+        Возвращает queryset с учетом поискового запроса.
+        """
+        search_query = self.request.GET.get('q', '')
+        if search_query:
+            search_output = Publication.objects.filter(title__icontains=search_query).order_by('-created_at')
+            search_output |= Publication.objects.filter(content__icontains=search_query).order_by('-created_at')
+            return search_output
         return Publication.objects.all().order_by('-created_at')
 
 
