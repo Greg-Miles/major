@@ -8,11 +8,10 @@ class PageContentForm(forms.ModelForm):
     """
     class Meta:
         model = PageContent
-        fields = ['content', ]
+        fields = ['content',]
         widgets = {
             'content': CKEditor5Widget(attrs={'rows': 10, 'cols': 80, }),
         }
         labels = {
-            'page_name': 'Имя страницы',
             'content': 'Содержимое страницы',
         }

@@ -45,10 +45,10 @@
             <button id="edit-btn" class="edit-btn"><i class="bi bi-pencil-square"></i>Редактировать</button>
 
 
-            <form id="edit-form" method="post" style="display:none;">
+            <form class="edit-form" method="post" style="display:none;">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="save-btn">Сохранить</button>
+                <button type="submit" id="save-btn" class="save-btn">Сохранить</button>
                 <button type="button" id="cancel-btn" class="cancel-btn">Отмена</button>
             </form>
         </div>

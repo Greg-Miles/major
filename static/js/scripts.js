@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const editBtn = document.getElementById('edit-btn');
-    const editForm = document.getElementById('edit-form');
-    const cancelBtn = document.getElementById('cancel-btn');
+    const editBtn = document.getElementByClass('edit-btn');
+    const editForm = document.getElementByClass('edit-form');
+    const cancelBtn = document.getElementByClass('cancel-btn');
     if (editBtn) {
         editBtn.addEventListener('click', function() {
             editForm.style.display = 'block';

@@ -154,8 +154,6 @@ class ContactPageView(TemplateView):
             form.instance.page_name = 'Контакты'
             form.save()
             return redirect('contacts')
-        else:
-            messages.error(request, "Ошибка при сохранении контента. Пожалуйста, проверьте форму.")
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
