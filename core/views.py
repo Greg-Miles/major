@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden, FileResponse
 from django.conf import settings
+from django.contrib import messages
 from django.views.generic import TemplateView, ListView
 from django.db.models import F
 import bleach
@@ -100,14 +101,24 @@ class PublicationListView(ListView):
         Возвращает queryset с учетом поискового запроса.
         """
         search_query = self.request.GET.get('q', '')
+        category = self.request.GET.get('category', None)
+        queryset = Publication.objects.all().order_by('-created_at')
+
         if search_query:
-            search_output = Publication.objects.filter(title__icontains=search_query).order_by('-created_at')
-            search_output |= Publication.objects.filter(content__icontains=search_query).order_by('-created_at')
-            return search_output
-        return Publication.objects.all().order_by('-created_at')
+            queryset = queryset.filter(
+                title__icontains=search_query
+            ) | queryset.filter(
+                content__icontains=search_query
+            )
+            queryset = queryset.distinct().order_by('-created_at')
+
+        if category:
+            queryset = queryset.filter(category=category)
+
+        return queryset
 
 
-# class ScheduleView(ListView):
+
 
 class ContactPageView(TemplateView):
     """
@@ -143,6 +154,8 @@ class ContactPageView(TemplateView):
             form.instance.page_name = 'Контакты'
             form.save()
             return redirect('contacts')
+        else:
+            messages.error(request, "Ошибка при сохранении контента. Пожалуйста, проверьте форму.")
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -199,3 +212,4 @@ class LessonScheduleView(ListView):
             return redirect('lessons_schedule')
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
+    

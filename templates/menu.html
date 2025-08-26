@@ -1,13 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
 {% block extra_header %}
-    <nav aria-label="breadcrumb" class="container mt-3">
+<div class="container">
+    <nav aria-label="breadcrumb" class="container mt-3 menu-bar">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">
                 <a href="{% url 'landing' %}">Главная</a>
             </li>
-            <li class="breadcrumb-item" aria-current="page">
-                <a href="{% url 'publication_list' %}">Блог</a>
+            <li class="breadcrumb-item dropdown" aria-current="page">
+                <div class="dropdown">
+                    <a href="{% url 'publication_list' %}" class="dropdown-toggle">Блог</a>
+                    <div class="dropdown-content col">
+                        {% for category in categories %}
+                            <a href="{% url 'publication_list' %}?category={{ category.0 }}">{{ category.1 }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
             </li>
             <li class="breadcrumb-item" aria-current="page">
                 <a href="{% url 'lessons_schedule' %}">Расписание</a>
@@ -25,5 +33,5 @@
 
 
     </nav>
-
+</div>
 {% endblock extra_header %}

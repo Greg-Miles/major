@@ -5,8 +5,8 @@
 {% endblock extra_styles %}
 {% block content %}
 <div class="container">
-    <div class="card">
-        <div class="card-header">
+    <div class="card my-5">
+        <div class="pub-header">
             <h2>Контакты</h2>
         </div>
         <div class="card-body">
@@ -16,14 +16,14 @@
     {% if user.is_superuser %}
         <div class="container">
 
-            <button id="edit-btn" class="btn btn-primary"><i class="bi bi-pencil-square"></i>Редактировать</button>
+            <button id="edit-btn" class="edit-btn"><i class="bi bi-pencil-square"></i>Редактировать</button>
 
 
             <form id="edit-form" method="post" style="display:none;">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-success">Сохранить</button>
-                <button type="button" id="cancel-btn" class="btn btn-secondary">Отмена</button>
+                <button type="submit" class="save-btn">Сохранить</button>
+                <button type="button" id="cancel-btn" class="cancel-btn">Отмена</button>
             </form>
         </div>
     {% endif %}
