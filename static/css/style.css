@@ -4,6 +4,9 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: cadetblue!important;
+}
 /* Сама выпадашка */
 .dropdown {
   position: relative;
@@ -37,7 +40,7 @@
 }
 
 .menu-bar {
-    background-color: indigo;
+    background-color: steelblue;
     color: white;
     padding: 10px;
     border-radius: 5px;
