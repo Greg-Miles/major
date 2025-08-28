@@ -37,9 +37,15 @@
         </table>
     </div>
     <div class="container editable-block">
-        <div class="page-content-block">
-            {{ page_content.content | safe }}
-        </div>
+        {% comment %} в расписании показываем карточку объявлений только если там есть контент отличный от пустого {% endcomment %}
+        {% if page_content.content != '<p>&nbsp;</p>'%}
+            <div class="card">
+                <div class="pub-header"></div>
+                <div class="card-body page-content-block">
+                    {{ page_content.content | safe }}
+                </div>
+            </div>
+        {% endif %}
         {% if user.is_superuser %}
 
         <div>

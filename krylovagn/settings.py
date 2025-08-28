@@ -38,6 +38,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,6 +72,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.categories',
+                'core.context_processors.page_content',
             ],
         },
     },
@@ -226,4 +228,37 @@ ALLOWED_ATTRIBUTES = {
     'img': ['src', 'alt', 'title', 'width', 'height', 'style'],
     'th': ['colspan', 'rowspan', 'style', 'class'],
     'td': ['colspan', 'rowspan', 'style', 'class'],
+}
+
+# Настройки темы Jazzmin для админки
+JAZZMIN_SETTINGS = {
+    "show_ui_builder": True,
+    "topmenu_links": [
+        {
+            "name": "Главная",
+            "url": "/",            # куда вести
+            "icon": "fas fa-home", # иконка FontAwesome (необязательно)
+            "new_window": False,   # открывать в новом окне?
+        },
+        {
+            "name":"Мои работы",
+            "url":"publication_list",
+            "new_window": False,
+        },
+        {
+            "name":"Расписание",
+            "url":"lessons_schedule",
+            "new_window": False,
+        },
+        {
+            "name":"Контакты",
+            "url":"contacts",
+            "new_window": False,
+        }
+    ],
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "litera",
+    "dark_mode_theme": "slate",
 }

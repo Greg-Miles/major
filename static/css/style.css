@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: cadetblue!important;
+    background-color: lightseagreen!important;
 }
 /* Сама выпадашка */
 .dropdown {
@@ -61,7 +61,7 @@ body {
 
 /* Кнопки редактирования на странице контактов */
 .edit-btn {
-    background-color: teal;
+    background-color: darkslategray;
     color: white;
     border: none;
     padding: 10px 20px;

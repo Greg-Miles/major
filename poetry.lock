@@ -74,6 +74,21 @@ Pillow = "*"
 dev = ["bandit[toml] (==1.8.2)", "black (==25.1.0)", "codespell (==2.4.1)", "coverage (==7.6.10)", "mypy (==1.15.0)", "mypy-extensions (==1.0.0)", "pytest (==8.3.4)", "pytest-cov (==6.0.0)", "pytest-django (==4.9.0)", "pytest-mock (==3.14.0)", "safety (==3.2.14)", "types-setuptools (==75.8.0.20250110)", "typing_extensions (==4.12.2)"]
 
 [[package]]
+name = "django-jazzmin"
+version = "3.0.1"
+description = "Drop-in theme for django admin, that utilises AdminLTE 3 & Bootstrap 4 to make yo' admin look jazzy"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "django_jazzmin-3.0.1-py3-none-any.whl", hash = "sha256:12a0a4c1d4fd09c2eef22acf6a1f03112b515ba695c59faa8ea80efc81c1f21b"},
+    {file = "django_jazzmin-3.0.1.tar.gz", hash = "sha256:67ae148bade41267a09ca8e4352ddefa6121795ebbac238bb9a6564ff841eb1b"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+
+[[package]]
 name = "dotenv"
 version = "0.9.9"
 description = "Deprecated package"
@@ -271,4 +286,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "7d4c66b6d99a17752280667a6327662f448096e5d8e3a09b2e7db233ebf55714"
+content-hash = "f88e0f6b6e222a29105beb37dc64e6384e272f2c76764f2dcc66314ca625a01f"

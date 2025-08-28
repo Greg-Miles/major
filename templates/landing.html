@@ -9,12 +9,17 @@
 {% endblock extra_styles %}
 
 {% block content %}
-<div class="container mt-5 editable-block">
-    <h1 class="text-center">Добро пожаловать на главную страницу!</h1>
-        <div class="page-content-block">
+<div class="container editable-block mt-5">
+
+    <div class="card ">
+        <div class="pub-header">
+            <h1 class="text-center">Добро пожаловать на главную страницу!</h1>
+        </div>
+        <div class="card-body page-content-block">
             {{ page_content.content | safe }}
         </div>
-        {% if user.is_superuser %}
+    </div>
+    {% if user.is_superuser %}
         <div>
 
             <button class="edit-btn"><i class="bi bi-pencil-square"></i>Редактировать</button>
