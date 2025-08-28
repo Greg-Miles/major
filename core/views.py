@@ -9,15 +9,31 @@ from .models import Publication, Lesson, PageContent
 from .forms import PageContentForm
 
 
-def get_page_content(page_for):
+def handle_page_content_post(request, template_name, page_name, redirect_url):
     """
-    Получает контент страницы по названию шаблона.
+    Универсальная обработка POST-запроса для редактирования PageContent.
     """
-    try:
-        return PageContent.objects.get(page_for=page_for)
-
-    except PageContent.DoesNotExist:
-        return None
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("Только для администратора")
+    page_content = PageContent.objects.filter(page_for=template_name).first()
+    form = PageContentForm(request.POST, instance=page_content)
+    if form.is_valid():
+        bleached_content = bleach.clean(
+            form.cleaned_data['content'],
+            tags=settings.ALLOWED_TAGS,
+            attributes=settings.ALLOWED_ATTRIBUTES,
+            strip=True
+        )
+        form.instance.content = bleached_content
+        form.instance.page_for = template_name
+        form.instance.page_name = page_name
+        form.save()
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': True, 'content': bleached_content})
+        return redirect(redirect_url)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': False, 'errors': form.errors})
+    return None, form
 
 def download_file(request, pk):
     """
@@ -54,41 +70,28 @@ class LandingView(TemplateView):
     Главная страница сайта.
     """
     template_name = 'landing.html'
-    page_content = get_page_content(template_name)
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, form=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Получаем контент страницы
-        page_content = get_page_content(self.template_name)
-        context['page_content'] = page_content
-        # Форма только для суперпользователя
         if self.request.user.is_superuser:
-            initial = {'content': page_content.content} if page_content else {}
-            context['form'] = PageContentForm(initial=initial)
+            if form is not None:
+                context['form'] = form
+            else:
+                page_content = PageContent.objects.filter(page_for=self.template_name).first()
+                initial = {'content': page_content.content} if page_content else {}
+                context['form'] = PageContentForm(initial=initial)
         return context
     
     def post(self, request, *args, **kwargs):
-        if not request.user.is_superuser:
-            return HttpResponseForbidden("Только для администратора")
-        page_content = get_page_content(self.template_name)
-        form = PageContentForm(request.POST, instance=page_content)
-        if form.is_valid():
-            bleached_content = bleach.clean(
-                form.cleaned_data['content'],
-                tags=settings.ALLOWED_TAGS,
-                attributes=settings.ALLOWED_ATTRIBUTES,
-                strip=True
-                )
-            form.instance.content = bleached_content
-            form.instance.page_for = self.template_name
-            form.instance.page_name = 'Главная страница'
-            form.save()
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'content': bleached_content})
-            return redirect('landing')
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'errors': form.errors})
-        context = self.get_context_data(form=form)
+        result = handle_page_content_post(
+            request,
+            self.template_name,
+            'Главная страница',
+            'landing'
+        )
+        if isinstance(result, (JsonResponse, HttpResponseForbidden)):
+            return result
+        _, form = result
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -130,39 +133,25 @@ class ContactPageView(TemplateView):
     Страница контактов.
     """
     template_name = 'contacts.html'
-    page_content = get_page_content(template_name)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        context['page_content'] = self.page_content
-        # Форма только для суперпользователя
         if self.request.user.is_superuser:
-            initial = {'content': self.page_content.content} if self.page_content else {}
+            page_content = PageContent.objects.filter(page_for=self.template_name).first()
+            initial = {'content': page_content.content} if page_content else {}
             context['form'] = PageContentForm(initial=initial)
         return context
     
     def post(self, request, *args, **kwargs):
-        if not request.user.is_superuser:
-            return HttpResponseForbidden("Только для администратора")
-        page_content = get_page_content(self.template_name)
-        form = PageContentForm(request.POST, instance=page_content)
-        if form.is_valid():
-            bleached_content = bleach.clean(
-                form.cleaned_data['content'],
-                tags=settings.ALLOWED_TAGS,
-                attributes=settings.ALLOWED_ATTRIBUTES,
-                strip=True
-                )
-            form.instance.content = bleached_content
-            form.instance.page_for = self.template_name
-            form.instance.page_name = 'Контакты'
-            form.save()
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'content': bleached_content})
-            return redirect('contacts')
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'errors': form.errors})
+        result = handle_page_content_post(
+            request,
+            self.template_name,
+            'Контакты',
+            'contacts'
+        )
+        if isinstance(result, (JsonResponse, HttpResponseForbidden)):
+            return result
+        _, form = result
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -173,7 +162,6 @@ class LessonScheduleView(ListView):
     model = Lesson
     template_name = 'lessons_schedule.html'
     context_object_name = 'lessons'
-    page_content = get_page_content(template_name)
 
     def get_queryset(self):
         return Lesson.objects.all().order_by('weekday', 'lesson_time')
@@ -194,33 +182,22 @@ class LessonScheduleView(ListView):
             schedule.append((weekday_num, weekday_name, lessons_by_weekday[weekday_num]))
         context['schedule'] = schedule
         # Добавляем контент страницы
-        context['page_content'] = self.page_content
         if self.request.user.is_superuser:
-            initial = {'content': self.page_content.content} if self.page_content else {}
+            page_content = PageContent.objects.filter(page_for=self.template_name).first()
+            initial = {'content': page_content.content} if page_content else {}
             context['form'] = PageContentForm(initial=initial)
         return context
     
     def post(self, request, *args, **kwargs):
-        if not request.user.is_superuser:
-            return HttpResponseForbidden("Только для администратора")
-        page_content = get_page_content(self.template_name)
-        form = PageContentForm(request.POST, instance=page_content)
-        if form.is_valid():
-            bleached_content = bleach.clean(
-                form.cleaned_data['content'],
-                tags=settings.ALLOWED_TAGS,
-                attributes=settings.ALLOWED_ATTRIBUTES,
-                strip=True
-                )
-            form.instance.content = bleached_content
-            form.instance.page_for = self.template_name
-            form.instance.page_name = 'Расписание уроков'
-            form.save()
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'content': bleached_content})
-            return redirect('lessons_schedule')
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'errors': form.errors})
+        result = handle_page_content_post(
+            request,
+            self.template_name,
+            'Расписание уроков',
+            'lessons_schedule'
+        )
+        if isinstance(result, (JsonResponse, HttpResponseForbidden)):
+            return result
+        _, form = result
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
     
