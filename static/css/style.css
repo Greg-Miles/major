@@ -5,7 +5,8 @@
 }
 
 body {
-    background-color: lightseagreen!important;
+    background-image: url('../img/background.jpg');
+    background-size: cover;
 }
 /* Сама выпадашка */
 .dropdown {
@@ -31,6 +32,14 @@ body {
 /* Показывать выпадашку при наведении */
 .dropdown:hover .dropdown-content {display: block;}
 
+/* Ссылки внутри выпадашки */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
 /* Заголовки публикаций в блоге */
 .pub-header {
     background-color: indigo;
@@ -39,25 +48,25 @@ body {
     border-radius: 5px 5px 0 0;
 }
 
+/* меню-бары на всех страницах */
 .menu-bar {
-    background-color: steelblue;
+    background-color: rgb(76, 172, 196);
     color: white;
     padding: 10px;
     border-radius: 5px;
 }
 
 .menu-bar a {
-    color: white;
+    color: black;
+    font-size: 16pt;
+}
+
+.menu-bar a:hover {
+    color: black;
+    background-color: white;
 }
 
 
-/* Ссылки внутри выпадашки */
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
 
 /* Кнопки редактирования на странице контактов */
 .edit-btn {
@@ -88,4 +97,10 @@ body {
     padding: 10px 20px;
     border-radius: 30px;
     margin-top: 10px;
+}
+
+/* Форматирование портрета на главной странице */
+.portrait-box {
+    height: auto;
+    width: auto;
 }

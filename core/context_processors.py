@@ -3,6 +3,7 @@ from .models import Publication, PageContent
 def categories(request):
     """
     Контекстный процессор для добавления категорий публикаций в контекст шаблонов."""
+    # Нужно для работы выпадающего списка категорий в шаблонах
     return {
         'categories': Publication.category.field.choices
     }

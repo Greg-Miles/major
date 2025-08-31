@@ -13,11 +13,14 @@ def handle_page_content_post(request, template_name, page_name, redirect_url):
     """
     Универсальная обработка POST-запроса для редактирования PageContent.
     """
+    #запрет что-то делать не администратору
     if not request.user.is_superuser:
         return HttpResponseForbidden("Только для администратора")
+    #получение или создание контента страницы
     page_content = PageContent.objects.filter(page_for=template_name).first()
     form = PageContentForm(request.POST, instance=page_content)
     if form.is_valid():
+        #если форма валидна, сохраняем в модель, предварительно очистив от нежелательного HTML
         bleached_content = bleach.clean(
             form.cleaned_data['content'],
             tags=settings.ALLOWED_TAGS,
@@ -29,9 +32,11 @@ def handle_page_content_post(request, template_name, page_name, redirect_url):
         form.instance.page_name = page_name
         form.save()
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            #возвращаем JSON-ответ с очищенным контентом
             return JsonResponse({'success': True, 'content': bleached_content})
         return redirect(redirect_url)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        #возвращаем JSON-ответ с ошибками формы
         return JsonResponse({'success': False, 'errors': form.errors})
     return None, form
 
@@ -72,6 +77,9 @@ class LandingView(TemplateView):
     template_name = 'landing.html'
 
     def get_context_data(self, form=None, **kwargs):
+        """
+        Метод обработки конекста с добавления формы редактирования контента страницы в контекст
+        """
         context = super().get_context_data(**kwargs)
         if self.request.user.is_superuser:
             if form is not None:
@@ -83,6 +91,10 @@ class LandingView(TemplateView):
         return context
     
     def post(self, request, *args, **kwargs):
+        """
+        Метод для обработки POST-запроса для редактирования контента страницы
+        """
+        #выносим логику в отдельную функцию
         result = handle_page_content_post(
             request,
             self.template_name,
@@ -90,6 +102,7 @@ class LandingView(TemplateView):
             'landing'
         )
         if isinstance(result, (JsonResponse, HttpResponseForbidden)):
+            # если результат - это JsonResponse или HttpResponseForbidden, возвращаем его напрямую
             return result
         _, form = result
         context = self.get_context_data(form=form)
@@ -135,6 +148,9 @@ class ContactPageView(TemplateView):
     template_name = 'contacts.html'
 
     def get_context_data(self, **kwargs):
+        """
+        Метод обработки конекста с добавления формы редактирования контента страницы в контекст
+        """
         context = super().get_context_data(**kwargs)
         if self.request.user.is_superuser:
             page_content = PageContent.objects.filter(page_for=self.template_name).first()
@@ -143,6 +159,9 @@ class ContactPageView(TemplateView):
         return context
     
     def post(self, request, *args, **kwargs):
+        """
+        Метод для обработки POST-запроса для редактирования контента страницы
+        """
         result = handle_page_content_post(
             request,
             self.template_name,
@@ -164,9 +183,16 @@ class LessonScheduleView(ListView):
     context_object_name = 'lessons'
 
     def get_queryset(self):
+        """
+        Метод возвращает отсортированный по дню недели и времени уроков queryset.
+        """
         return Lesson.objects.all().order_by('weekday', 'lesson_time')
     
     def get_context_data(self, **kwargs):
+        """
+        Метод обработки контекста с группировкой уроков по дням недели
+        и добавления формы редактирования контента страницы в контекст
+        """
         context = super().get_context_data(**kwargs)
         lessons = self.get_queryset()
         lessons_by_weekday ={}
@@ -189,6 +215,9 @@ class LessonScheduleView(ListView):
         return context
     
     def post(self, request, *args, **kwargs):
+        """
+        Обработка POST-запроса для редактирования контента страницы
+        """
         result = handle_page_content_post(
             request,
             self.template_name,

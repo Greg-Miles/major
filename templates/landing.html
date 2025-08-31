@@ -13,10 +13,15 @@
 
     <div class="card ">
         <div class="pub-header">
-            <h1 class="text-center">Добро пожаловать на главную страницу!</h1>
+            <h1 class="text-center">Добро пожаловать на мой сайт!</h1>
         </div>
-        <div class="card-body page-content-block">
-            {{ page_content.content | safe }}
+        <div class="d-flex">
+            <div class="portrait-box card-body">
+                <img src="{% static 'img/portrait.jpg' %}" class="img-fluid" alt="Landing Image">
+            </div>
+            <div class="card-body page-content-block">
+                {{ page_content.content | safe }}
+            </div>
         </div>
     </div>
     {% if user.is_superuser %}
