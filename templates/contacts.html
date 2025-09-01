@@ -15,10 +15,7 @@
     </div>
     {% if user.is_superuser %}
         <div>
-
             <button class="edit-btn"><i class="bi bi-pencil-square"></i>Редактировать</button>
-
-
             <form class="edit-form" method="post" style="display:none;">
                 {% csrf_token %}
                 {{ form.as_p }}

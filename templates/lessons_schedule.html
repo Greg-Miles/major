@@ -8,7 +8,7 @@
     <div class="container">
         <h2>Расписание занятий</h2>
     </div>
-    <div class="container mt-3">
+    <div class="container  table-responsive mt-3">
         <table class="table table-bordered table-striped-columns">
             <thead class="table-primary">
                 <tr>
@@ -36,7 +36,7 @@
             </tbody>
         </table>
     </div>
-    <div class="container editable-block">
+    <div class="container editable-block mt-5">
         {% comment %} в расписании показываем карточку объявлений только если там есть контент отличный от пустого {% endcomment %}
         {% if page_content.content != '<p>&nbsp;</p>'%}
             <div class="card">

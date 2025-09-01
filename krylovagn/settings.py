@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == "True"
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -34,6 +34,10 @@ ALLOWED_HOSTS = [
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
+CSRF_TRUSTED_ORIGINS=[
+    "http://127.0.0.1",
+    "http://localhost",
+]
 
 # Application definition
 
@@ -232,7 +236,7 @@ ALLOWED_ATTRIBUTES = {
 
 # Настройки темы Jazzmin для админки
 JAZZMIN_SETTINGS = {
-    "show_ui_builder": True,
+    "show_ui_builder": False,
     "topmenu_links": [
         {
             "name": "Главная",
