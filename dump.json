@@ -1,0 +1,84 @@
+{
+    "type": "table",
+    "database": null,
+    "name": "core_pagecontent",
+    "withoutRowId": false,
+    "strict": false,
+    "ddl": "CREATE TABLE \"core_pagecontent\" (\"id\" integer NOT NULL PRIMARY KEY AUTOINCREMENT, \"page_name\" varchar(100) NOT NULL UNIQUE, \"page_for\" varchar(50) NOT NULL, \"content\" text NOT NULL);",
+    "columns": [
+        {
+            "name": "id",
+            "type": "integer",
+            "constraints": [
+                {
+                    "type": "NOT NULL",
+                    "definition": "NOT NULL "
+                },
+                {
+                    "type": "PRIMARY KEY",
+                    "definition": "PRIMARY KEY AUTOINCREMENT"
+                }
+            ]
+        },
+        {
+            "name": "page_name",
+            "type": "varchar",
+            "constraints": [
+                {
+                    "type": "NOT NULL",
+                    "definition": "NOT NULL "
+                },
+                {
+                    "type": "UNIQUE",
+                    "definition": "UNIQUE"
+                }
+            ]
+        },
+        {
+            "name": "page_for",
+            "type": "varchar",
+            "constraints": [
+                {
+                    "type": "NOT NULL",
+                    "definition": "NOT NULL"
+                }
+            ]
+        },
+        {
+            "name": "content",
+            "type": "text",
+            "constraints": [
+                {
+                    "type": "NOT NULL",
+                    "definition": "NOT NULL"
+                }
+            ]
+        }
+    ],
+    "rows": [
+        [
+            1,
+            "",
+            "",
+            "Наши контакты"
+        ],
+        [
+            2,
+            "Контакты",
+            "contacts.html",
+            "<p><strong>Почта:<\/strong><br><a href=\"mailto:krylova_gn@mail.ru\">krylova_gn@mail.ru<\/a><\/p><p>&nbsp;<\/p><p><strong>Телефон\/WhatsApp\/MAX:<\/strong><\/p><p>+7(902)747-02-88<\/p>"
+        ],
+        [
+            3,
+            "Главная страница",
+            "landing.html",
+            "<p>&nbsp;&nbsp;&nbsp;&nbsp;\"Смертельный грех учителя - быть скучным\",  И.Ф. Гербарт.<br>&nbsp;&nbsp;&nbsp;&nbsp;Уровень интеллекта и способность к творчеству — не одно и то же, хотя иногда ошибочно считают, что они взаимопредполагают друг друга. Человек с высоким IQ не обязательно одарен в творческом плане, а человек с творческими способностями вовсе не обязательно интеллектуал.<br>&nbsp;&nbsp;&nbsp;&nbsp;Не всегда урок выходит таким, каким был задуман: всего предусмотреть невозможно. Но именно в такой ситуации проявляется мастерство учителя: найти достойный выход из ситуации, которая создалась, принять правильное решение.<br>&nbsp;&nbsp;&nbsp;&nbsp;Профессию педагога можно сравнить с актерским мастерством. Ведь ты всегда на виду, на тебя смотрят, тебе наследуют, с тебя берут пример.<br>&nbsp;&nbsp;&nbsp;&nbsp;Стремление не отставать от детей, идти в ногу со временем помогает постоянно поддерживать&nbsp;себя&nbsp;в&nbsp;тонусе.<\/p><p><strong>Меня зовут:<\/strong><\/p><p>Крылова Галина Николаевна<br><br><strong>Мой педагогический стаж:<\/strong><br>38 лет<br><br><strong>Моё место работы<\/strong>:&nbsp;<\/p><p>ОГКОУ \"Ивановская школа-интернат&nbsp;№2\"&nbsp;г.&nbsp;Иваново,<\/p>"
+        ],
+        [
+            4,
+            "Расписание уроков",
+            "lessons_schedule.html",
+            "<p>&nbsp;<\/p>"
+        ]
+    ]
+}
