@@ -31,16 +31,16 @@ DEBUG = os.getenv('DEBUG') == "True"
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    '217.199.253.33:8000'
-    'krylovagn.ru:8000'
+    '217.199.253.33',
+    'krylovagn.ru',
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 CSRF_TRUSTED_ORIGINS=[
     "http://127.0.0.1",
     "http://localhost",
-    'http://krylovagn.ru'
-    'http://217.199.253.33'
+    'http://krylovagn.ru',
+    'http://217.199.253.33',
 ]
 
 # Application definition
