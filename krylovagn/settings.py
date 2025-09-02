@@ -31,8 +31,8 @@ DEBUG = os.getenv('DEBUG') == "True"
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    '217.199.253.33'
-    'krylovagn.ru'
+    '217.199.253.33:8000'
+    'krylovagn.ru:8000'
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
