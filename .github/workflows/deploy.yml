@@ -21,16 +21,20 @@ jobs:
             cd /home/v/major
 
             # Останавливаем службу приложения
-            echo "${{ secrets.PASSWORD }}" | sudo -S systemctl stop major
+            echo "${{ secrets.PASSWORD }}" | sudo -S systemctl stop gunicorn_major
 
             # Обновляем код из репозитория
-            git pull
+            echo "${{ secrets.PASSWORD }}" | git pull
 
             # Если у вас Poetry
             /home/v/.local/bin/poetry install --no-root
 
+            /home/v/.local/bin/poetry run python manage.py migrate
+
             # Создаем файл .env из секрета
             echo "${{ secrets.ENV_FILE }}" > /home/v/major/.env
 
+            /home/v/.local/bin/poetry run python manage.py collectstatic --noinput
+
             # Перезапускаем systemd сервис
-            echo "${{ secrets.PASSWORD }}" | sudo -S systemctl start major
+            echo "${{ secrets.PASSWORD }}" | sudo -S systemctl start gunicorn_major
