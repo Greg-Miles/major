@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.views.generic import TemplateView, ListView
 from django.db.models import F
 import bleach
+from bleach.css_sanitizer import CSSSanitizer
 from .models import Publication, Lesson, PageContent
 from .forms import PageContentForm
 
@@ -21,20 +22,26 @@ def handle_page_content_post(request, template_name, page_name, redirect_url):
     form = PageContentForm(request.POST, instance=page_content)
     if form.is_valid():
         #если форма валидна, сохраняем в модель, предварительно очистив от нежелательного HTML
-        # bleached_content = bleach.clean(
-        #     form.cleaned_data['content'],
-        #     tags=settings.ALLOWED_TAGS,
-        #     attributes=settings.ALLOWED_ATTRIBUTES,
-        #     strip=True,
-        #     css_sanitizer=None,
-        # )
-        form.instance.content = form.cleaned_data['content']
-        form.instance.page_for = template_name
-        form.instance.page_name = page_name
-        form.save()
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            #возвращаем JSON-ответ с очищенным контентом
-            return JsonResponse({'success': True, 'content': form.cleaned_data['content']})
+        try:
+            bleached_content = bleach.clean(
+                form.cleaned_data['content'],
+                tags=settings.ALLOWED_TAGS,
+                attributes=settings.ALLOWED_ATTRIBUTES,
+                strip=True,
+                css_sanitizer=CSSSanitizer(),
+            )
+            form.instance.content = bleached_content
+            form.instance.page_for = template_name
+            form.instance.page_name = page_name
+            form.save()
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                #возвращаем JSON-ответ с очищенным контентом
+                return JsonResponse({'success': True, 'content': bleached_content})
+        except Exception as e:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                #возвращаем JSON-ответ с ошибкой
+                return JsonResponse({'success': False, 'error': str(e)})
+            messages.error(request, f"Ошибка при сохранении: {e}")
         return redirect(redirect_url)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         #возвращаем JSON-ответ с ошибками формы
