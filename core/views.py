@@ -21,19 +21,20 @@ def handle_page_content_post(request, template_name, page_name, redirect_url):
     form = PageContentForm(request.POST, instance=page_content)
     if form.is_valid():
         #если форма валидна, сохраняем в модель, предварительно очистив от нежелательного HTML
-        bleached_content = bleach.clean(
-            form.cleaned_data['content'],
-            tags=settings.ALLOWED_TAGS,
-            attributes=settings.ALLOWED_ATTRIBUTES,
-            strip=True
-        )
-        form.instance.content = bleached_content
+        # bleached_content = bleach.clean(
+        #     form.cleaned_data['content'],
+        #     tags=settings.ALLOWED_TAGS,
+        #     attributes=settings.ALLOWED_ATTRIBUTES,
+        #     strip=True,
+        #     css_sanitizer=None,
+        # )
+        form.instance.content = form.cleaned_data['content']
         form.instance.page_for = template_name
         form.instance.page_name = page_name
         form.save()
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             #возвращаем JSON-ответ с очищенным контентом
-            return JsonResponse({'success': True, 'content': bleached_content})
+            return JsonResponse({'success': True, 'content': form.cleaned_data['content']})
         return redirect(redirect_url)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         #возвращаем JSON-ответ с ошибками формы
