@@ -15,15 +15,15 @@
     {% block extra_styles %}
     {% endblock extra_styles %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-
         {% block extra_header %}
             {% include "menu.html" %}
         {% endblock extra_header %}
     </header>
-    <main>
-                <!-- Отображение сообщений -->
+<main class="flex-grow-1">
+
+                {% comment %} <!-- Отображение сообщений --> {% endcomment %}
         {% if messages %}
         <div class="container mt-5 pt-3">
             {% for message in messages %}
@@ -41,6 +41,9 @@
         {% endblock content %}
     </main>
     <footer>
+        <div class="container text-center">
+            <p>&copy; Крылов И.С. Все права защищены.</p>
+        </div>
         {% block extra_footer %}
         
         {% endblock extra_footer %}
