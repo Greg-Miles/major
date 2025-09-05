@@ -11,6 +11,14 @@ class PublicationAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('is_published', 'created_at')
     ordering = ('-created_at',)
+    actions = ['publish']
+
+    @admin.action(description='Опубликовать')
+    def publish(self, request, queryset):
+        """
+        Действие для публикации выбранных отзывов.
+        """
+        queryset.update(is_published=True)
 
 class LessonAdmin(admin.ModelAdmin):
     """
